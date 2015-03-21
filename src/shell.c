@@ -25,6 +25,7 @@ void host_command(int, char **);
 void mmtest_command(int, char **);
 void test_command(int, char **);
 void _command(int, char **);
+void fib_command(int, char**);
 
 #define MKCL(n, d) {.name=#n, .fptr=n ## _command, .desc=d}
 
@@ -38,6 +39,7 @@ cmdlist cl[]={
 	MKCL(help, "help"),
 	MKCL(test, "test new function"),
 	MKCL(, ""),
+	MKCL(fib,"count fibonacci numbers"),
 };
 
 int parse_command(char *str, char *argv[]){
@@ -163,8 +165,21 @@ void help_command(int n,char *argv[]){
 void test_command(int n, char *argv[]) {
     int handle;
     int error;
-
-    fio_printf(1, "\r\n");
+    int num=25,i,j,x=3;
+    fio_printf(1,"prime num below 100: 2\n");
+    for(i=2;i<=num;){
+	for(j=2;j<=x-1;j++){
+		if(x%j==0)
+			break;
+		}
+	if(j==x){
+		fio_printf(1,"%d\r\n",x);
+		i++;
+	}
+	x++;
+}
+      fio_printf(1,"\n");
+//    fio_printf(1, "\r\n");
     
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
@@ -201,3 +216,19 @@ cmdfunc *do_command(const char *cmd){
 	}
 	return NULL;	
 }
+
+void fib_command(int n,char *argv[]){
+        
+	int i=0;
+	int x=0, y=1,result,tmp;
+	fio_printf(1,"\r\n");
+	fio_printf(1,"fib(1)=1\r\n");
+	for(i=2;i<20;i++){
+		result=x+y;
+		tmp=y;
+		y=result;
+		x=tmp;
+		fio_printf(1,"fib(%d)=%d\r\n",i,result);
+	}
+}
+		
