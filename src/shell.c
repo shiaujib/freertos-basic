@@ -4,7 +4,6 @@
 #include <string.h>
 #include "fio.h"
 #include "filesystem.h"
-
 #include "FreeRTOS.h"
 #include "task.h"
 #include "host.h"
@@ -38,8 +37,8 @@ cmdlist cl[]={
 	MKCL(mmtest, "heap memory allocation test"),
 	MKCL(help, "help"),
 	MKCL(test, "test new function"),
+        MKCL(fib,"count fibonacci numbers"),
 	MKCL(, ""),
-	MKCL(fib,"count fibonacci numbers"),
 };
 
 int parse_command(char *str, char *argv[]){
@@ -162,11 +161,17 @@ void help_command(int n,char *argv[]){
 	}
 }
 
-void test_command(int n, char *argv[]) {
+void test_command(int n, char *argv[]) {  //argument for how many prime numbers you want
     int handle;
     int error;
-    int num=25,i,j,x=3;
-    fio_printf(1,"prime num below 100: 2\n");
+    int num=0,i,j,x=3;
+    num=argv[1][0]-'0';
+    int len=strlen(argv[1]);
+    if(len==2)
+	num=(argv[1][0]-'0')*10+argv[1][1]-'0';
+	
+    fio_printf(1,"prime numbers : \r\n");
+    fio_printf(1,"2\r\n");   
     for(i=2;i<=num;){
 	for(j=2;j<=x-1;j++){
 		if(x%j==0)
@@ -179,7 +184,7 @@ void test_command(int n, char *argv[]) {
 	x++;
 }
       fio_printf(1,"\n");
-//    fio_printf(1, "\r\n");
+
     
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
